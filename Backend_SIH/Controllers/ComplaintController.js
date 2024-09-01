@@ -8,16 +8,16 @@ const raiseComplaint = async (req, res) => {
             return res.status(400).json({ message: "Fill all the required fields." });
         }
 
-        const image = req.file ? `/uploads/${req.file.filename}` : null; 
+        const images = req.files['image'] ? req.files['image'].map(file => `/uploads/${file.filename}`) : [];
 
         const newComplaint = new Complaint({
             description:description,
-            image:image,
+            image:images,
             locality:locality,
             village:village,
             city:city,
             state:state,
-
+            image:images
         });
 
         const savedComplaint = await newComplaint.save();

@@ -7,8 +7,10 @@ const storage = multer.diskStorage({
         callback(null,"./uploads")
     }, 
     filename: (req, file, callback) => {
-        callback(null, `image-${Date.now()}.${file.originalname}`);
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        callback(null, `image-${uniqueSuffix}${path.extname(file.originalname)}`); // Preserve file extension
     }
+
 });
 //imgFilter
 const isImage=(req,file,callback)=>{
@@ -27,6 +29,10 @@ const upload = multer({
     limits: { fileSize: 2000000 }, 
     fileFilter: isImage
 })
+const uploadMultiple = upload.fields([
+    { name: 'assetImage', maxCount: 5 },
+    { name: 'recieptImage', maxCount: 5 },
+    {name:'image',maxCount:5}
+]);
 
-
-module.exports = upload;
+module.exports = uploadMultiple;
