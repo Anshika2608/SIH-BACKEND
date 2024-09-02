@@ -58,7 +58,7 @@ const Assetschema=new mongoose.Schema({
         required:true
      },
      completionTenure:{
-        type:String,
+        type:Number,
         required:true
      },
      contactNo:{
