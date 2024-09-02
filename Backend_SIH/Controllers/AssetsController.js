@@ -2,7 +2,7 @@ const assets = require("../Models/Asset")
 const newAsset = async(req, res) => {
     try {
         const { Type, scheme, latitude, longitude, budget, startDate, completionDate, expiry, maintainancePeriod, contractorName, contractorBudget,
-            warranty, completionTenure, contactNo, review } = req.body;
+            warranty, completionTenure, contactNo, review,lastMaintainanceDate } = req.body;
 
        
 
@@ -29,7 +29,8 @@ const newAsset = async(req, res) => {
             contactNo:contactNo,
             review:review,
             assetImage: assetImages,
-            recieptImage: recieptImages
+            recieptImage: recieptImages,
+            lastMaintainanceDate:lastMaintainanceDate
 
         })
         
@@ -49,6 +50,20 @@ const newAsset = async(req, res) => {
 
     }
 }
+
+const getAssets=async(req,res)=>{
+    try{
+        const Assets=await assets.find({})
+        return res.status(200).json({message:"Assets recieved successfully",Assets})
+
+    }catch(error){
+       console.log("error while recieving the list of assets",error)
+       return res.status(500).json({message:"Error while recieving the list of assets."})
+    }
+}
+
+
+
 module.exports = {
-    newAsset
+    newAsset,getAssets
 }

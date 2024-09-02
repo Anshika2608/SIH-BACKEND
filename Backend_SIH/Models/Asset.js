@@ -41,6 +41,10 @@ const Assetschema=new mongoose.Schema({
         type:String,
         required:true
      },
+     lastMaintainanceDate:{
+      type:Date,
+      required:false
+     },
      contractorName:{
         type:String,
         required:true
