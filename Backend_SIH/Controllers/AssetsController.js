@@ -2,7 +2,7 @@ const assets = require("../Models/Asset")
 const newAsset = async(req, res) => {
     try {
         const { Type, scheme, latitude, longitude, budget, startDate, completionDate, expiry, maintainancePeriod, contractorName, contractorBudget,
-            warranty, completionTenure, contactNo, review,lastMaintainanceDate } = req.body;
+            warranty, completionTenure, contactNo, review,lastMaintenanceDate } = req.body;
 
        
 
@@ -12,6 +12,8 @@ const newAsset = async(req, res) => {
             !warranty || !completionTenure || !contactNo || !assetImages ||!recieptImages) {
             return res.status(400).json({ message: "Fill all the required details" })
         }
+
+        
         const newAsset = new assets({
             Type: Type,
             scheme: scheme,
@@ -30,7 +32,7 @@ const newAsset = async(req, res) => {
             review:review,
             assetImage: assetImages,
             recieptImage: recieptImages,
-            lastMaintainanceDate:lastMaintainanceDate
+            lastMaintenanceDate:lastMaintenanceDate||null
 
         })
         
@@ -63,7 +65,54 @@ const getAssets=async(req,res)=>{
 }
 
 
+const maintenanceAsset = async (req, res) => {
+    try {
+        const currentDate = new Date();
+        const dateIn5Days = new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000);
+
+        const mainAssets = await assets.aggregate([
+            {
+                $addFields: {
+                    nextMaintenanceDate: {
+                        $cond: {
+                            if: { $eq: ["$lastMaintenanceDate", null] },
+                            then: {
+                                $dateAdd: {
+                                    startDate: "$completionDate",
+                                    unit: "month",
+                                    amount: { $toInt: "$completionTenure" }
+                                }
+                            },
+                            else: {
+                                $dateAdd: {
+                                    startDate: "$lastMaintenanceDate",
+                                    unit: "month",
+                                    amount: { $toInt: "$completionTenure" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $match: {
+                    nextMaintenanceDate: {
+                        $gte: currentDate,
+                        $lte: dateIn5Days
+                    }
+                }
+            }
+        ]);
+
+        res.status(200).json(mainAssets);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: 'An error occurred while fetching maintenance assets.', error });
+    }
+};
+
+
 
 module.exports = {
-    newAsset,getAssets
+    newAsset,getAssets,maintenanceAsset
 }

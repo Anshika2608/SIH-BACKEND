@@ -38,10 +38,10 @@ const Assetschema=new mongoose.Schema({
         required:true
      },
      maintainancePeriod:{
-        type:String,
+        type:Number,
         required:true
      },
-     lastMaintainanceDate:{
+     lastMaintenanceDate:{
       type:Date,
       required:false
      },
