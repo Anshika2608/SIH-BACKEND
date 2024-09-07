@@ -4,7 +4,9 @@ const newAsset = async(req, res) => {
         const { Type, scheme, latitude, longitude, budget, startDate, completionDate, expiry, maintainancePeriod, contractorName, contractorBudget,
             warranty, completionTenure, contactNo, review,lastMaintenanceDate } = req.body;
 
-       
+       if(contactNo.length!==10){
+        return res.status(400).json({message:"Contact number must includes 10 digits"})
+       }
 
         const assetImages = req.files['assetImage'] ? req.files['assetImage'].map(file => `/uploads/${file.filename}`) : [];
         const recieptImages = req.files['recieptImage'] ? req.files['recieptImage'].map(file => `/uploads/${file.filename}`) : [];
@@ -93,16 +95,11 @@ const maintenanceAsset = async (req, res) => {
                         }
                     }
                 }
-            },
-            {
-                $match: {
-                    nextMaintenanceDate: {
-                        $gte: currentDate,
-                        $lte: dateIn5Days
-                    }
-                }
             }
         ]);
+        
+        console.log(mainAssets);
+        
 
         res.status(200).json(mainAssets);
     } catch (error) {

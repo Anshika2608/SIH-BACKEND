@@ -1,5 +1,5 @@
 const Complaint = require("../Models/Complaint");
-
+const cloudinary=require("../Middleware/Cloudinary")
 const raiseComplaint = async (req, res) => {
     try {
         const { description,locality,village,city,state } = req.body;
@@ -7,17 +7,20 @@ const raiseComplaint = async (req, res) => {
         if (!description || !locality || !village || !city || !state ) {
             return res.status(400).json({ message: "Fill all the required fields." });
         }
-
-        const images = req.files['image'] ? req.files['image'].map(file => `/uploads/${file.filename}`) : [];
-
-        const newComplaint = new Complaint({
+        const imageUrls = [];
+        if (req.files) {
+            for (const file of req.files['image']) {
+                const upload = await cloudinary.uploader.upload(file.path);
+                imageUrls.push(upload.secure_url);
+            }
+        }        const newComplaint = new Complaint({
             description:description,
-            image:images,
+            image:imageUrls,
             locality:locality,
             village:village,
             city:city,
             state:state,
-            image:images
+           
         });
 
         const savedComplaint = await newComplaint.save();
