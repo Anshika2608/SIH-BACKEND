@@ -23,8 +23,8 @@ const complaintSchema = new mongoose.Schema({
         required: true, 
     },
     image: {
-        type: Array, 
-        required: false,
+        type: [String],
+        default: [],
     },
     locality:{
         type:String,

@@ -8,12 +8,18 @@ const raiseComplaint = async (req, res) => {
             return res.status(400).json({ message: "Fill all the required fields." });
         }
         const imageUrls = [];
-        if (req.files) {
+        if (req.files && req.files['image']) {
             for (const file of req.files['image']) {
-                const upload = await cloudinary.uploader.upload(file.path);
-                imageUrls.push(upload.secure_url);
+                try {
+                    const upload = await cloudinary.uploader.upload(file.path);
+                    imageUrls.push(upload.secure_url);
+                } catch (uploadError) {
+                    console.error("Error uploading image:", uploadError);
+                    return res.status(500).json({ message: "Error uploading image." });
+                }
             }
-        }        const newComplaint = new Complaint({
+        }  
+          const newComplaint = new Complaint({
             description:description,
             image:imageUrls,
             locality:locality,
