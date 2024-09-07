@@ -37,7 +37,7 @@ const raiseComplaint = async (req, res) => {
         });
     } catch (error) {
         console.error("Error raising complaint:", error);
-        return res.status(500).json({ message: "An error occurred while raising the complaint." });
+        return res.status(500).json({ message: "An error occurred while raising the complaint." , error: error.message,});
     }
 };
 
