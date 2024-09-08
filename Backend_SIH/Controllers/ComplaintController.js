@@ -8,7 +8,7 @@ const raiseComplaint = async (req, res) => {
             return res.status(400).json({ message: "Fill all the required fields." });
         }
         const imageUrls = [];
-        if (req.files && req.files['image']) {
+        if ( req.files['image']) {
             for (const file of req.files['image']) {
                 try {
                     const upload = await cloudinary.uploader.upload(file.path);
