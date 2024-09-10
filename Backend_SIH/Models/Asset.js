@@ -72,6 +72,10 @@ const Assetschema=new mongoose.Schema({
      recieptImage:{
         type:Array,
         required:true
+     },
+     lastMaintenanceDate:{
+      type:Date,
+      required:true
      }
 
 
