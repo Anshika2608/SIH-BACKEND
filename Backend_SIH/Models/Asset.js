@@ -41,9 +41,9 @@ const Assetschema=new mongoose.Schema({
         type:Number,
         required:true
      },
-     lastMaintenanceDate:{
+     nextMaintenanceDate:{
       type:Date,
-      required:false
+      required:true
      },
      contractorName:{
         type:String,
