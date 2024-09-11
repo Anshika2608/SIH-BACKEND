@@ -39,7 +39,8 @@ const upload = multer({
 const uploadMultiple = upload.fields([
     { name: 'assetImage', maxCount: 5 },
     { name: 'recieptImage', maxCount: 5 },
-    {name:'image',maxCount:5}
+    {name:'image',maxCount:5},
+    {name:'billImage',maxCount:5}
 ]);
 
 module.exports = uploadMultiple;

@@ -10,7 +10,7 @@ app.use("/uploads",express.static("./uploads"));
 
 app.use("/complaint",require("./Routes/ComplaintRoutes"))
 app.use("/assets",require("./Routes/AssetRoutes"))
-
+app.use("/inventory",require("./Routes/InventoryRoutes"))
 
 app.listen(port,()=>{
     console.log(`server is running on ${port}`)
