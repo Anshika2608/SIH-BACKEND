@@ -4,6 +4,7 @@ const cloudinary = require("../Middleware/Cloudinary");
 const newInventory = async (req, res) => {
     try {
         const {
+            type,
             purchaseDate,
             piecesPurchased,
             costPerPiece,
@@ -47,11 +48,12 @@ const newInventory = async (req, res) => {
             }
         }
 
-        if (!purchaseDate || !piecesPurchased || !costPerPiece || !expiryDate || !purpose || !expenditure) {
+        if (!purchaseDate || !piecesPurchased || !costPerPiece || !expiryDate || !purpose || !expenditure || !type) {
             return res.status(400).json({ message: "Fill all the required fields" });
         }
 
         const newInventoryItem = new inventory({
+            type,
             purchaseDate,
             piecesPurchased,
             costPerPiece,
@@ -74,6 +76,10 @@ const newInventory = async (req, res) => {
     }
 };
 
+const getInventory=async(req,res)=>{
+    
+}
+
 module.exports = {
-    newInventory
+    newInventory,getInventory
 };
