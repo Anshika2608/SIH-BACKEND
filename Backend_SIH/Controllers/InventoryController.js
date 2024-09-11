@@ -77,7 +77,15 @@ const newInventory = async (req, res) => {
 };
 
 const getInventory=async(req,res)=>{
-    
+    try{
+        const inventoryItems=await inventory.find({})
+    return res.status(200).json({message:"Inventory recieved successfully",inventoryItems}) 
+    }catch(error){
+        console.log("error while recieving the list of inventory", error)
+
+        return res.status(500).json({message:"Error while recievong the Inventories",error:error.message})
+    }
+   
 }
 
 module.exports = {
